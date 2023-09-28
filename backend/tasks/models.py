@@ -13,4 +13,4 @@ class Task(Model):
     task_list: ForeignKeyRelation["TaskList"] = fields.ForeignKeyField('models.TaskList', related_name='tasks')
     name = fields.CharField(max_length=255)
     description = fields.TextField(max_length=1023)
-    complete = fields.BooleanField
+    completed = fields.BooleanField(default=False)
