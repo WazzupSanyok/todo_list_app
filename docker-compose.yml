@@ -1,11 +1,40 @@
 version: "3.8"
 
 services:
+  backend:
+    container_name: backend
+    image: backend
+    build: ./backend
+    command: uvicorn main:app --host 0.0.0.0 --reload
+    ports:
+      - "8000:8000"
+    working_dir:
+      /app
+    restart: on-failure
+    depends_on:
+      migration:
+        condition: service_completed_successfully
+    env_file:
+      - backend/.env
+
   postgres:
     container_name: postgres
     image: postgres
     restart: on-failure
-    ports:
-      - "5432:5432"
     env_file:
-      - ./.env
+      - backend/.env
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  migration:
+    container_name: migration
+    image: backend
+    command: aerich upgrade
+    depends_on:
+      postgres:
+        condition: service_healthy
+    env_file:
+      - backend/.env
