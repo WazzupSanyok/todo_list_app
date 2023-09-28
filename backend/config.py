@@ -1,9 +1,9 @@
 from functools import lru_cache
 
-from pydantic_settings import BaseSettings
+from pydantic import BaseSettings
 
 
-class Settings(BaseSettings):
+class DatabaseSettings(BaseSettings):
     POSTGRES_HOST: str
     POSTGRES_PORT: str
     POSTGRES_USER: str
@@ -15,6 +15,14 @@ class Settings(BaseSettings):
         "task_lists.models",
         "tasks.models"
     ]
+
+
+class AuthSettings(BaseSettings):
+    authjwt_secret_key: str
+
+
+class Settings(DatabaseSettings, AuthSettings):
+    pass
 
 
 @lru_cache

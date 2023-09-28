@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 
 class User(Model):
     id = fields.IntField(pk=True)
-    username = fields.CharField(max_length=63)
-    mail = fields.CharField(max_length=255)
+    username = fields.CharField(max_length=63, unique=True)
+    email = fields.CharField(max_length=255, unique=True)
     password = fields.CharField(max_length=63)
     task_lists: ReverseRelation["TaskList"]
