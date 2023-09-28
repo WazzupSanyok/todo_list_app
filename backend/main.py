@@ -5,6 +5,7 @@ from starlette.responses import JSONResponse
 from config import get_settings
 from database import init_db
 from users.routers import router as users_router
+from task_lists.routers import router as task_lists_router
 
 from fastapi_jwt_auth import AuthJWT
 
@@ -36,3 +37,4 @@ def authjwt_exception_handler(request: Request, exc: AuthJWTException):
 
 
 app.include_router(users_router, tags=["Users"], prefix="/api/users")
+app.include_router(task_lists_router, tags=["Task Lists"], prefix="/api/task_lists")
