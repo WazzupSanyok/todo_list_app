@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-
+from database import init_db
 from config import get_settings
 
 app = FastAPI(
@@ -13,6 +13,8 @@ app = FastAPI(
 @app.on_event("startup")
 async def startup() -> None:
     settings = get_settings()
+
+    init_db(app, settings)
 
     app.dependency_overrides = {
         get_settings: lambda: settings,
